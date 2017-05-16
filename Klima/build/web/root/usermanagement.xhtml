@@ -1,0 +1,137 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <h:head>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.css"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.min.css"></link>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/locale/bootstrap-table-hu-HU.min.js"></script> 
+        <link href="../css/bootstrap.min.css" rel="stylesheet" type="text/css"></link>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"></link>
+        <!-- Latest compiled and minified JavaScript -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>        
+        <title>Felhasználók nyilvántartás</title>
+    </h:head>
+    <h:body>
+        <div class="container">           
+            <nav role="navigation" class="navbar navbar-default navbar-fixed-top">
+                <div style="float:right;">
+                    Üdv #{userparams.username}!        
+                    <h:form>
+                        <h:commandLink class="btn btn-default" action="#{userparams.Logout()}" value="Logout"></h:commandLink>         
+                    </h:form>
+                </div>
+                <div class="navbar-collapse collapse" id="menu" >
+                    <ul class="nav navbar-nav ">
+                        <c:forEach var="item" items="#{userparams.menulist}">  
+                            <li role="presentation"><h:link value = "#{item.menuName}" outcome = "#{item.resource}" /></li>                          
+                        </c:forEach>
+                    </ul>        
+                </div>                
+            </nav>        
+            <br/><br/><br/><br/>
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <h2>Felhasználók</h2>
+                    <h:form>
+                        <h:dataTable value="#{uservm.getfindAll()}" var="o">
+                            <h:column>
+                                <f:facet name="header">Id</f:facet>#{o.id}
+                            </h:column>                
+                            <h:column>
+                                <f:facet name="header">Felhasználónév</f:facet>#{o.username}
+                            </h:column>
+                            <h:column>
+                               <f:facet name="header">Módosít</f:facet> <h:commandButton class="btn btn-default" value="edit" immediate="true" action="#{uservm.EditItem(o)}" />
+                            </h:column>
+                            <h:column>
+                               <f:facet name="header">Töröl</f:facet> <h:commandButton class="btn btn-default" value="delete" immediate="true" action="#{uservm.DeleteItem(o)}" />
+                            </h:column>
+                        </h:dataTable>
+                    </h:form>
+                     <hr/>
+                     <h3>Felvitel/modosítás</h3>
+                    <h:form>
+                        <table>
+                            <tr>
+                                <td>
+                                    <h:outputText value="Név:" />
+                                </td>
+                                <td>
+                                    <h:inputText class="form-control" value="#{uservm.ujItem.username}"></h:inputText>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <h:outputText value="Jelszó:" /> 
+                                </td>
+                                <td>
+                                    <h:inputSecret class="form-control" value="#{uservm.ujItem.passwd}"></h:inputSecret>
+                                </td>
+                            </tr>            
+                        </table>
+                        <br/>
+                        <h:commandButton class="btn btn-default" rendered="#{!uservm.edit}" action="#{uservm.AddNewItem}" value="Hozzáad"></h:commandButton>
+                        <h:commandButton class="btn btn-default" rendered="#{uservm.edit}" value="Módosít" action="#{uservm.SaveEdit}" ></h:commandButton>                       
+                        <h:commandButton class="btn btn-default" rendered="#{uservm.edit}" value="Mégsem" action="#{uservm.CancelEdit}" ></h:commandButton>                
+                    </h:form>      
+                     <h2>Felhasználói szerepkörök</h2>
+                    <h:form>
+                        <h:dataTable value="#{userrolevm.getfindAll()}" var="o">
+                            <h:column>
+                                <f:facet name="header">Id</f:facet>#{o.id}
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">Felhasználónév</f:facet>#{o.username}                
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">Role</f:facet>#{o.role}
+                            </h:column>
+                            <h:column>
+                               <f:facet name="header">Módosít</f:facet> <h:commandButton class="btn btn-default" value="edit" immediate="true" action="#{userrolevm.EditItem(o)}" />
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">Töröl</f:facet><h:commandButton class="btn btn-default" value="delete" immediate="true" action="#{userrolevm.DeleteItem(o)}" />
+                            </h:column>
+                        </h:dataTable>
+                    </h:form>
+                      <hr/>
+                     <h3>Felvitel/modosítás</h3>
+                    <h:form>
+                        <table>
+                            <tr>
+                                <td>
+                                    <h:outputText value="Név:" />
+                                </td>
+                                <td>
+                                    <h:inputText class="form-control" value="#{userrolevm.ujItem.username}"></h:inputText>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <h:outputText value="Role" /> 
+                                </td>
+                                <td>
+                                    <h:inputText class="form-control" value="#{userrolevm.ujItem.role}"></h:inputText>
+                                </td>
+                            </tr>            
+                        </table>
+                        <br/>
+                        <h:commandButton class="btn btn-default" rendered="#{!userrolevm.edit}" action="#{userrolevm.AddNewItem}" value="Hozzáad"></h:commandButton>
+                        <h:commandButton class="btn btn-default" rendered="#{userrolevm.edit}" value="Módosít" action="#{userrolevm.SaveEdit}" ></h:commandButton>                       
+                        <h:commandButton class="btn btn-default" rendered="#{userrolevm.edit}" value="Mégsem" action="#{userrolevm.CancelEdit}" ></h:commandButton>                
+                    </h:form>     
+
+                    <h:link style="float:right;" outcome = "mainpage"> <input  class="btn btn-default" type="button" value="Vissza" name="return" /></h:link>
+                </div>
+            </div>
+        </div>        
+    </h:body>
+</html>
+

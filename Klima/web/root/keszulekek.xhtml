@@ -1,0 +1,162 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <h:head>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.css"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.min.css"></link>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/locale/bootstrap-table-hu-HU.min.js"></script> 
+        <link href="../css/bootstrap.min.css" rel="stylesheet" type="text/css"></link>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"></link>
+        <!-- Latest compiled and minified JavaScript -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>        
+        <title>Készülékek</title>
+    </h:head>
+    <h:body>
+        <div class="container">           
+            <nav role="navigation" class="navbar navbar-default navbar-fixed-top">
+                <div style="float:right;">
+                    Üdv #{userparams.username}!        
+                    <h:form>
+                        <h:commandLink class="btn btn-default" action="#{userparams.Logout()}" value="Logout"></h:commandLink>         
+                    </h:form>
+                </div>
+                <div class="navbar-collapse collapse" id="menu" >
+                    <ul class="nav navbar-nav ">
+                        <c:forEach var="item" items="#{userparams.menulist}">  
+                            <li role="presentation"><h:link value = "#{item.menuName}" outcome = "#{item.resource}" /></li>                          
+                        </c:forEach>
+                    </ul>        
+                </div>                
+            </nav>        
+            <br/><br/><br/><br/>
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <h:form>
+                        <h:dataTable class="table table-hover" value="#{keszulekekvm.getfindAll()}" var="o">
+                            <h:column>
+                                <f:facet name="header">Id</f:facet>#{o.id}
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">Gyártó</f:facet>#{o.gyarto}
+                            </h:column> 
+                            <h:column>
+                                <f:facet name="header">Kivitel</f:facet>#{o.kivitel}
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">Elnevezés</f:facet>#{o.elnevezes}                
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">Energiaosztály</f:facet>#{o.energiaosztaly}
+                            </h:column>
+                            <h:column>    				
+                                <f:facet name="header">Fűtőteljesítmény</f:facet>#{o.futoteljesitmeny}
+                            </h:column>            
+                            <h:column>
+                                <f:facet name="header">Hűtőteljesítmény</f:facet>#{o.hutoteljesitmeny}
+                            </h:column>                            
+                            <h:column>
+                                <f:facet name="header">Garancia</f:facet>#{o.garancia}
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">Leírás</f:facet>#{o.leiras}
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">Módosít</f:facet><h:commandButton  class="btn btn-default" value="edit" immediate="true" action="#{keszulekekvm.EditItem(o)}" />
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">Töröl</f:facet><h:commandButton class="btn btn-default" value="delete" immediate="true" action="#{keszulekekvm.DeleteItem(o)}" />
+                            </h:column>
+                        </h:dataTable>
+                    </h:form>
+                    <hr/>
+                     <h3>Felvitel/modosítás</h3>
+                    <h:form>
+                        <table class="table table-hover">
+                            <tr><td>
+                                    <h:outputText value="Elnevezés" /> 
+                                </td><td><h:inputText class="form-control" value="#{keszulekekvm.ujItem.elnevezes}"></h:inputText></td></tr>
+                            <tr><td>
+                                    <h:outputText value="Gyártó:" /> 
+                                </td><td><h:inputText class="form-control" value="#{keszulekekvm.ujItem.gyarto}"></h:inputText></td></tr> 
+                            <tr><td>
+                                    <h:outputText value="Kivitel:" /> 
+                                </td><td><h:inputText class="form-control" value="#{keszulekekvm.ujItem.kivitel}"></h:inputText></td></tr>
+                            <tr><td>
+                                    <h:outputText value="Elnevezés:" /> 
+                                </td><td><h:inputText class="form-control"  value="#{keszulekekvm.ujItem.elnevezes}"></h:inputText></td></tr>
+                            <tr><td>
+                                    <h:outputText value="Fűtőteljesítmény:" /> 
+                                </td><td><h:inputText class="form-control" value="#{keszulekekvm.ujItem.futoteljesitmeny}"></h:inputText></td></tr>
+                            <tr><td>    				
+                                    <h:outputText value="Hűtőteljesítmény:" /> 
+                                </td><td><h:inputText class="form-control" value="#{keszulekekvm.ujItem.hutoteljesitmeny}"></h:inputText></td></tr>            
+                            <tr><td>
+                                    <h:outputText value="Garancia:" /> 
+                                </td><td><h:inputText class="form-control" value="#{keszulekekvm.ujItem.garancia}"></h:inputText></td></tr>                            
+                            <tr><td>
+                                    <h:outputText value="Energiaosztály:" /> 
+                                </td><td><h:inputText class="form-control" value="#{keszulekekvm.ujItem.energiaosztaly}"></h:inputText></td></tr>                            
+                            <tr><td>
+                                    <h:outputText value="Leírás" /> 
+                                </td><td><h:inputTextarea class="form-control" value="#{keszulekekvm.ujItem.leiras}"></h:inputTextarea></td></tr>                            
+                        </table>
+                       
+                        <h:commandButton rendered="#{!keszulekekvm.edit}" class="btn btn-default" action="#{keszulekekvm.AddNewItem}" value="Hozzáad"></h:commandButton>
+                        <h:commandButton rendered="#{keszulekekvm.edit}" class="btn btn-default" value="Módosít" action="#{keszulekekvm.SaveEdit}" ></h:commandButton>                       
+                        <h:commandButton rendered="#{keszulekekvm.edit}" class="btn btn-default" value="Mégsem" action="#{keszulekekvm.CancelEdit}" ></h:commandButton>                
+                    </h:form>   
+                     <hr/>
+                          <h3>Keresés</h3>
+                    <h:form>                   
+                        <table>
+                            <tr><td><h:outputText value="Gyártó:" /></td><td><h:inputText class="form-control" value="#{keszulekekvm.keresendoItem.gyarto}"></h:inputText></td></tr>
+                            <tr><td><h:outputText value="Kivitel:" /></td><td><h:inputText class="form-control" value="#{keszulekekvm.keresendoItem.kivitel}"></h:inputText></td></tr>
+                            <tr><td><h:outputText value="Elnevezés(részlet):" /></td><td><h:inputText class="form-control" value="#{keszulekekvm.keresendoItem.elnevezes}"></h:inputText></td></tr>
+                            <tr><td rowspan="2"><h:commandButton action="#{keszulekekvm.Kereses}"  class="btn btn-default" value="Keress!"></h:commandButton></td><td></td></tr>
+                        </table>
+                    </h:form>
+                    <h:form>
+                        <h:dataTable class="table table-hover" rendered="#{not empty keszulekekvm.keresettItems}" value="#{keszulekekvm.keresettItems}" var="o">
+                            <h:column>
+                                <f:facet name="header">Id</f:facet>#{o.id}
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">Gyártó</f:facet>#{o.gyarto}
+                            </h:column> 
+                            <h:column>
+                                <f:facet name="header">Hűtőteljesítmény</f:facet>#{o.kivitel}
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">Elnevezés</f:facet>#{o.elnevezes}                
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">Energiaosztály</f:facet>#{o.energiaosztaly}
+                            </h:column>
+                            <h:column>    				
+                                <f:facet name="header">Fűtőteljesítmény</f:facet>#{o.futoteljesitmeny}
+                            </h:column>            
+                            <h:column>
+                                <f:facet name="header">Hűtőteljesítmény</f:facet>#{o.hutoteljesitmeny}
+                            </h:column>                            
+                            <h:column>
+                                <f:facet name="header">Garancia</f:facet>#{o.garancia}
+                            </h:column>
+                              <h:column>
+                                <f:facet name="header">Leírás</f:facet>#{o.leiras}
+                            </h:column>                           
+                        </h:dataTable>
+                    </h:form>
+                     <h:link style="float:right;" outcome = "mainpage"> <input  class="btn btn-default" type="button" value="Vissza" name="return" /></h:link>
+                </div>
+            </div>
+        </div>        
+    </h:body>
+</html>
+
